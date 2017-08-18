@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*- 
 
-from flask import Flask
-from flask_script import Manager
+from flask import Flask,render_template
 
-app=Flask(__name__)      #创建程序实例
+app=Flask(__name__)
 
-manager=Manager(app)
-
-@app.route('/')          #路由：处理URL和函数之间的关系
-def index():             #视图函数
-    return '<h1>NIHAO!</h1>'
+@app.route('/')
+def index():
+    return render_template("index.html")
 
 @app.route('/user/<name>')
 def user(name):
-	return "<h1>NiHao,%s</h1>" % name
+	return render_template('user.html',name=name)
 
-if __name__=='__main__': #启动服务器
-    manager.run()
+if __name__=='__main__':
+    app.run(debug=True)
