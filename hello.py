@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-
+import sys
 from flask import Flask,render_template,session,redirect,url_for,flash
 from flask_script import Manager
 from flask_bootstrap import Bootstrap
@@ -8,6 +8,9 @@ from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField,SubmitField
 from wtforms.validators import Required
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 app=Flask(__name__)
 app.config['SECRET_KEY']='hard to guess string'
@@ -27,7 +30,7 @@ def index():
 	if form.validate_on_submit():
 		old_name=session.get('name')
 		if old_name is not None and old_name != form.name.data:
-			flash('looks like you have changed name')
+			flash('你好像更改了名字。')
 		session['name']=form.name.data
 		return redirect(url_for('index'))
 	return render_template("index.html",form=form,name=session.get('name'),current_time=datetime.utcnow())
