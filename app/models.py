@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*- 
-from . import db,login_manager
+
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask.ext.login import UserMiXin
+from flask_login import UserMixin
+from . import db, login_manager
 
 class Role(db.Model):
 	__tablename__='roles'
@@ -13,7 +14,7 @@ class Role(db.Model):
 		return '<Role %r>' % self.name
 
 
-class User(UserMiXin,db.Model):
+class User(UserMixin, db.Model):
 	__tablename__='users'
 	id=db.Column(db.Integer,primary_key=True)
 	username=db.Column(db.String(64),unique=True,index=True)
