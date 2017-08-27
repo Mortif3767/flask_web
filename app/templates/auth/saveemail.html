@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}更改邮箱{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>
+        你好, {{ user.username }}!
+    </h1>
+    <h3>你现在可以修改你的邮箱。</h3>
+    <p>
+        <a href="{{ url_for('auth.change_email', token=token, _external=True) }}">点击此链接以更改</a>
+    </p>
+</div>
+{% endblock %}

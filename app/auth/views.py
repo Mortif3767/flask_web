@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from ..models import User
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm,\
-    PasswordResetForm
+    PasswordResetForm, ChangeEmailForm
 from .. import db
 from ..email import send_email
 
@@ -118,6 +118,24 @@ def password_reset(token):
 	return render_template('auth/reset_password.html', form=form)
 
 
+@auth.route('/change-email', methods=['GET', 'POST'])
+@login_required
+def change_email_request():
+	form = ChangeEmailForm()
+	if form.validate_on_submit():
+		if current_user.verify_password(form.password.data):
+			new_email = form.email.data
+			token = current_user.generate_email_change_token(new_email)
+			flash(u'成功受理')
+			return render_template('auth/saveemail.html', token=token, user=current_user)
+		flash(u'密码错误')
+	return render_template('auth/change_email.html', form=form)
 
-
-
+@auth.route('/change-email/<token>')
+@login_required
+def change_email(token):
+	if current_user.change_email(token):
+		flash(u'邮箱更新成功')
+	else:
+		flash(u'失败请求')
+	return redirect(url_for('main.index'))
