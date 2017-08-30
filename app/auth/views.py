@@ -29,7 +29,7 @@ def login():
 
 
 @auth.route('/logout')
-@login_required   #only authenticated user are allowed
+@login_required   #没有登陆用户会跳转到login_view指定的路由
 def logout():
 	logout_user()
 	flash(u"你已经退出。")
