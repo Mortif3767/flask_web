@@ -11,8 +11,8 @@ def permission_required(permission):            #permission为装饰函数功能
             if not current_user.can(permission):
                 abort(403)                      #为运行f这个函数添加条件，不满足条件即abort跳出错误
             return f(*args, **kwargs)
-        return decorated_function
+        return decorator_function
     return decorator
 
 def admin_required(f):
-    return permission_required(Permission.ADMINISTER).(f)
+    return permission_required(Permission.ADMINISTER)(f)

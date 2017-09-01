@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*- 
-
+import hashlib
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
+from flask import current_app, request
 from datetime import datetime
 
 
@@ -134,6 +134,15 @@ class User(UserMixin, db.Model):
 		self.email = new_email
 		db.session.add(self)
 		return True
+
+	def gravatar(self, size=100, default='identicon', rating='g'):
+		if request.is_secure:
+			url = 'https://s.gravatar.com/avatar'
+		else:
+			url = 'http://www.gravatar.com/avatar'
+		hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+		return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
+			url=url, hash=hash, size=size, default=default, rating=rating)
 
 	def can(self, permissions):
 		return self.role is not None and \
