@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, abort, request,\
+    current_app
 from . import main
 from ..models import User, Role, Permission, Post
 from flask_login import login_required, current_user
@@ -17,7 +18,12 @@ def index():
         #current_user是Flask-login提供的轻度包装User对象，真正的对象需要调用_get_current_object()
         db.session.add(post)
         return redirect(url_for('main.index'))
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    page = request.args.get('page', 1, type=int)     #dict.get(key, default=None, type=None)
+    #默认页面是第一页
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASK_POSTS_PER_PAGE'],
+        error_out=False)                             #返回第page页，每页*个记录
+    posts = pagination.items                         #留意pagination对象是什么？items是该对象的属性
     return render_template('index.html', form=form, posts=posts)
 
 
