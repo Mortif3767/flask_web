@@ -4,6 +4,11 @@ from wtforms import StringField, TextAreaField, SubmitField, BooleanField, Selec
 from wtforms.validators import Required, Length, Email, Regexp
 from ..models import Role, User
 
+class PostForm(FlaskForm):
+    body = TextAreaField(u'记录下你的日志', validators=[Required()])
+    submit =SubmitField(u'提交')
+
+
 class EditProfileForm(FlaskForm):
     name = StringField(u'姓名',validators=[Length(0,64)])
     location = StringField(u'位置',validators=[Length(0,64)])
