@@ -21,10 +21,10 @@ def index():
     page = request.args.get('page', 1, type=int)     #dict.get(key, default=None, type=None)
     #默认页面是第一页
     pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['FLASK_POSTS_PER_PAGE'],
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False)                             #返回第page页，每页*个记录
     posts = pagination.items                         #留意pagination对象是什么？items是该对象的属性
-    return render_template('index.html', form=form, posts=posts)
+    return render_template('index.html', form=form, posts=posts, pagination=pagination)
 
 
 @main.route('/user/<username>')
