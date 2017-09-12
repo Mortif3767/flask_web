@@ -18,6 +18,13 @@ class Permission:
 	ADMINISTER = 0x80
 
 
+class Follow(db.Model):
+	__tablename__ = 'follows'
+	follower_id = db.Column(db.Integer, db.ForeignKey('User.id'), primary_key = True)
+	followed_id = db.Column(db.Integer, db.ForeignKey('User.id'), Primary_key = True)
+	timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class Role(db.Model):
 	__tablename__='roles'
 	id=db.Column(db.Integer,primary_key=True)
@@ -66,6 +73,18 @@ class User(UserMixin, db.Model):
 	last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 	avatar_hash = db.Column(db.String(32))
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+	followed = db.relationship('Follow',
+		                       foreign_keys=[Follow.follower_id],
+		                       backref=db.backref('follower', lazy='joined'),
+		                       lazy='dynamic',
+		                       cascade='all, delete-orphan')
+
+	followers = db.relationship('Follow',
+		                        foreign_keys=[Follow.followed_id],
+		                        backref=db.backref('followed', lazy='joined'),
+		                        lazy='dynamic',
+		                        cascade='all, delete-orphan')
 
 	def __init__(self,**kwargs):
 		super(User, self).__init__(**kwargs)
@@ -163,6 +182,27 @@ class User(UserMixin, db.Model):
 	def ping(self):
 		self.last_seen = datetime.utcnow()
 		db.session.add(self)
+
+	def follow(self, user):
+		if not self.is_following(user):
+			f = Follow(follower=self, followed=user)
+			db.session.add(f)
+
+	def unfollow(self, user):
+		f = self.followed.filter_by(followed_id=user.id).first()
+		if f:
+			db.session.delete(f)
+
+	def is_following(self, user):
+		f = self.followed.filter_by(followed_id=user.id).first()
+		if f:
+			return True
+		else:
+			return False
+
+	def is_followed_by(self, user):
+		f = self.followers.filter_by(follower_id=user.id).first()
+		return f is not None
 
 	@staticmethod
 	def generate_fake(count=100):
