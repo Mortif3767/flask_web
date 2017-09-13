@@ -144,6 +144,39 @@ def edit(id):
     return render_template('edit_post.html', form=form)
 
 
+@main.route('/moderate')
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def moderate():
+    page = request.args.get('page', 1, type=int) 
+    pagination = Comment.query.order_by(Comment.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'],
+        error_out=False)
+    comments = pagination.items
+    return render_template('moderate.html', comments=comments,
+                           pagination=pagination, page=page)
+
+
+@main.route('/moderate/enable/<int:id>-<int:page>')  #这种做法page不能为空，还是通过request.args.get传递较好
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def moderate_enable(id, page):
+    comment = Comment.query.get_or_404(id)
+    comment.disabled = False
+    db.session.add(comment)
+    return redirect(url_for('main.moderate', page=page))
+
+
+@main.route('/moderate/disable/<int:id>')   #必有的参数直接反应在这里，可有可无的用request.args.get
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def moderate_disable(id):
+    comment = Comment.query.get_or_404(id)
+    comment.disabled = True
+    db.session.add(comment)
+    return redirect(url_for('main.moderate', page=request.args.get('page', 1, type=int)))
+
+
 @main.route('/follow/<username>')
 @login_required
 @permission_required(Permission.FOLLOW)
