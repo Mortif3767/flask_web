@@ -45,3 +45,8 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError(u'用户名已存在')    
+
+
+class CommentForm(FlaskForm):
+    body = StringField('', validators=[Required()])
+    submit = SubmitField(u'提交')

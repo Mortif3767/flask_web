@@ -11,6 +11,7 @@ class Config:                     #基类用于定义通用配置
 	FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
 	FLASKY_POSTS_PER_PAGE = 20
 	FLASKY_FOLLOWERS_PER_PAGE = 50
+	FLASKY_COMMENTS_PER_PAGE = 5
 
 	@staticmethod                 #不需要self参数，不用实例化，直接类名.程序名引用
 	def init_app(app):            #可以执行对当前环境的配置初始化
