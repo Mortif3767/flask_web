@@ -148,7 +148,7 @@ class User(UserMixin, db.Model):
 		db.session.add(self)
 		return True
 
-	def generate_reset_token(self, expiration):
+	def generate_auth_token(self, expiration):
 		s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
 		return s.dumps({'id':self.id})
 
@@ -283,16 +283,17 @@ class Post(db.Model):
 
 	def to_json(self):
 		json_post = {
-			'url':url_for('api.get_post', id=self.id, _external=True)   #external用于生成完整url
+			'url':url_for('api.get_post', id=self.id, _external=True),   #external用于生成完整url
 			'body': self.body,
 			'body_html': self.body_html,
-			'timestamp': self.timestamp
-			'author': url_for('api.get_user',id=self.author_id, _external=True),
-			'comments': url_for('api.get_post_comments', id=self.id, _external=True),
+			'timestamp': self.timestamp,
+			#'author': url_for('api.get_user',id=self.author_id, _external=True),
+			#'comments': url_for('api.get_post_comments', id=self.id, _external=True),
 			'comment_count': self.comments.count()
 		}
 		return json_post
 
+	@staticmethod
 	def from_json(json_post):
 		body = json_post.get('body')
 		if body is None or body =='':
