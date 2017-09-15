@@ -4,9 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app, request
+from flask import current_app, request, url_for
 from datetime import datetime
 from markdown import markdown
+from app.exceptions import ValidationError
 import bleach
 
 
@@ -224,6 +225,19 @@ class User(UserMixin, db.Model):
 		f = self.followers.filter_by(follower_id=user.id).first()
 		return f is not None
 
+	def to_json(self):
+		json_user = {
+			'url': url_for('api.get_user', id=self.id, _external=True),
+			'username':self.username,
+			'member_since':self.member_since,
+			'last_seen': self.last_seen,
+			'about_me':self.about_me,
+			'posts':url_for('api.get_posts', id=self.id, _external=True),
+			'followed_posts':url_for('api.get_user_followed_posts', id=self.id, _external=True),
+			'post_count': self.posts.count()
+		}
+		return json_user
+
 	@staticmethod
 	def generate_fake(count=100):
 		from sqlalchemy.exc import IntegrityError
@@ -266,6 +280,24 @@ class Post(db.Model):
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	body_html = db.Column(db.Text)
 	comments = db.relationship('Comment', backref='post', lazy='dynamic')
+
+	def to_json(self):
+		json_post = {
+			'url':url_for('api.get_post', id=self.id, _external=True)   #external用于生成完整url
+			'body': self.body,
+			'body_html': self.body_html,
+			'timestamp': self.timestamp
+			'author': url_for('api.get_user',id=self.author_id, _external=True),
+			'comments': url_for('api.get_post_comments', id=self.id, _external=True),
+			'comment_count': self.comments.count()
+		}
+		return json_post
+
+	def from_json(json_post):
+		body = json_post.get('body')
+		if body is None or body =='':
+			raise ValidationError(u'文章没有内容')
+		return Post(body=body)
 
 	@staticmethod
 	def generate_fake(count=100):

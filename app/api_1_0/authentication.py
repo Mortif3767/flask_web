@@ -26,6 +26,14 @@ def verify_password(email_or_token, password):    #回调函数定义密码验�
     #程序返回布尔值，另外把已认证用户保存在全局变量g中，可供视图函数使用
 
 
+@api.route('/token')
+def get_token():
+    if g.current_user.is_anonymous() or g.token_used:
+        return unauthorized(u'无效认证')
+    return jsonify({'token':g.current_user.generate_auth_token(expiration=3600),
+        'expiration': 3600})
+
+
 @auth.error_handler
 def auth_error():
     return unauthorized(u'无效证书')
