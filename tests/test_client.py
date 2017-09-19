@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 import unittest
 import re
@@ -29,9 +28,9 @@ class FlaskClientTestCase(unittest.TestCase):
             'email': 'test@test.com',
             'username': 'biubiu',
             'password': 'biu',
-            'password2': 'biu'
-            })
-        self.assertTrue(response.status_code == 302)
+            'password2': 'biu'}, follow_redirects=True)
+        data = response.get_data(as_text=True)
+        self.assertTrue(u'注意点击确认链接' in data)
 
         #测试登陆
         response = self.client.post(url_for('auth.login'),data={
@@ -39,7 +38,7 @@ class FlaskClientTestCase(unittest.TestCase):
             'password': 'biu'
             }, follow_redirects=True)
         data = response.get_data(as_text=True)
-        self.assertTrue(re.search(u'你好,\s+biubiu', data))
+        self.assertTrue('You have not confirmed your account yet' in data)
 
         #发送确认令牌
         user = User.query.filter_by(email='test@test.com').first()

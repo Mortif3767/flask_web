@@ -75,13 +75,11 @@ class User(UserMixin, db.Model):
 	avatar_hash = db.Column(db.String(32))
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
 	comments = db.relationship('Comment', backref='author', lazy='dynamic')
-
 	followed = db.relationship('Follow',
 		                       foreign_keys=[Follow.follower_id],
 		                       backref=db.backref('follower', lazy='joined'),
 		                       lazy='dynamic',
 		                       cascade='all, delete-orphan')
-
 	followers = db.relationship('Follow',
 		                        foreign_keys=[Follow.followed_id],
 		                        backref=db.backref('followed', lazy='joined'),
@@ -98,7 +96,8 @@ class User(UserMixin, db.Model):
 		if self.email is not None and self.avatar_hash is None:
 			self.avatar_hash = hashlib.md5(
 				self.email.encode('utf-8')).hexdigest()
-		self.follow(self)
+		#self.follow(self)
+		self.followed.append(Follow(followed=self))
 
 	@property
 	def followed_posts(self):
@@ -247,14 +246,13 @@ class User(UserMixin, db.Model):
 		seed()
 		for i in range(count):
 			u = User(email=forgery_py.internet.email_address(),
-				     username=forgery_py.internet.user_name(),
-				     password=forgery_py.lorem_ipsum.word(),
-				     confirmed=True,
-				     name=forgery_py.name.full_name(),
-				     location=forgery_py.address.city(),
-				     about_me=forgery_py.lorem_ipsum.sentence(),
-				     member_since=forgery_py.date.date(True)
-				     )
+			         username=forgery_py.internet.user_name(True),
+			         password=forgery_py.lorem_ipsum.word(),
+			         confirmed=True,
+			         name=forgery_py.name.full_name(),
+			         location=forgery_py.address.city(),
+			         about_me=forgery_py.lorem_ipsum.sentence(),
+			         member_since=forgery_py.date.date(True))
 			db.session.add(u)
 			try:
 				db.session.commit()

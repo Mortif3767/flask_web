@@ -2,6 +2,7 @@
 import unittest
 import re
 import threading
+import time
 from selenium import webdriver
 from app import db, create_app
 from app.models import Role, User, Post
@@ -13,30 +14,33 @@ class SeleniumTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         try:
-            cls.client = webdriver.Firefox()
+            cls.client = webdriver.Safari()
         except:
             pass
         if cls.client:
             cls.app = create_app('testing')
-            cls.app_context = cls.app.app_context
+            cls.app_context = cls.app.app_context()
             cls.app_context.push()
 
-        import logging
-        logger = logging.getLogger('werkzeug')
-        logger.setLevel('ERROR')
+            import logging
+            logger = logging.getLogger('werkzeug')
+            logger.setLevel('ERROR')
 
-        db.create_all()
-        Role.insert_roles()
-        User.generate_fake(10)
-        Post.generate_fake(10)
+            db.drop_all()
+            db.create_all()
+            Role.insert_roles()
+            User.generate_fake(10)
+            Post.generate_fake(10)
 
-        admin_role = Role.query.filter_by(permissions=0xff).first()
-        admin = User(email='test1@test.com',password='biu',
-                     username='biubiu1', confirmed=True, role=admin_role)
-        db.session.add(admin)
-        db.session.commit()
+            admin_role = Role.query.filter_by(permissions=0xff).first()
+            admin = User(email='test1@test.com', password='biu',
+                         username='biubiu1', confirmed=True, role=admin_role)
+            db.session.add(admin)
+            db.session.commit()
 
-        threading.Thread(target=cls.app.run).start()
+            threading.Thread(target=cls.app.run).start()
+
+            time.sleep(1)
 
     @classmethod
     def tearDownClass(cls):
