@@ -253,7 +253,8 @@ class User(UserMixin, db.Model):
 				     name=forgery_py.name.full_name(),
 				     location=forgery_py.address.city(),
 				     about_me=forgery_py.lorem_ipsum.sentence(),
-				     member_since=forgery_py.date.date(True))
+				     member_since=forgery_py.date.date(True)
+				     )
 			db.session.add(u)
 			try:
 				db.session.commit()

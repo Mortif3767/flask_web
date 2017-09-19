@@ -1,13 +1,15 @@
 
 # -*- coding: utf-8 -*-
 import unittest
+import re
 from app import create_app, db
 from app.models import User, Role
+from flask import url_for
 
 class FlaskClientTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('testing')
-        self.app_context = self.app.app_context
+        self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
         Role.insert_roles()
@@ -24,16 +26,16 @@ class FlaskClientTestCase(unittest.TestCase):
 
     def test_register_and_login(self):    #注册新用户
         response = self.client.post(url_for('auth.register'), data={
-            'email': 'test@test.com'
-            'username': 'biubiu'
-            'password': 'biu'
+            'email': 'test@test.com',
+            'username': 'biubiu',
+            'password': 'biu',
             'password2': 'biu'
             })
         self.assertTrue(response.status_code == 302)
 
         #测试登陆
         response = self.client.post(url_for('auth.login'),data={
-            'email': 'test@test.com'
+            'email': 'test@test.com',
             'password': 'biu'
             }, follow_redirects=True)
         data = response.get_data(as_text=True)
