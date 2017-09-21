@@ -14,7 +14,6 @@
 		{% if token is not none %}
 		<a href="{{ url_for('auth.confirm', token=token, _external=True) }}">请点击此链接以确认,并在点击链接前用新账户登陆</a>
 		{% else %}
-		
 		{% endif %}
 	</p>
 </div>
