@@ -24,36 +24,36 @@
 <br> 
 PS：注册流程中应有邮箱验证环节，编程中为了测试方便，涉及邮箱验证token信息的流程，被修改为直接跳转到验证页面，不经过email模块发送：）<br>
 <br> 
----
+
 程序结构：<br>
 |-flask_web<br>
-    |-app/<br>
-       |-main/                       #主页面蓝本<br>
-        |-__init__.py<br>
-           |-views.py<br>
-           |-forms.py<br>
-           |-errors.py<br>
-     |-auth/                       #账户管理页面蓝本<br>
-       |-__init__.py<br>
-           |-views.py<br>
-           |-forms.py<br>
-       |-api_1_0/                    #api服务蓝本<br>
-      |-__init__.py<br>
-          |-authentication.py<br>
-          |-decorators.py<br>
-          |-errors.py<br>
-          |-posts.py<br>
-     |-templates/                  #jinja2模版目录 内容略<br>
-     |-static/                     #静态文件<br>
-     |-__init__.py                 #主程序初始化<br>
-     |-decorators.py               #装饰器程序<br>
-     |-email.py                    #邮件模块<br>
-     |-exceptions.py               #自定义错误<br>
-     |-models.py                   #数据类型<br>
-   |-manage.py                     #启动脚本<br>
-   |-config.py                       #配置信息<br>
-   |-data-dev.sqlite               #程序建设用数据库<br>
-   |-data-test.sqlite              #程序测试缓冲数据库<br>
-   |-requirements/                 #程序运行扩展需求表<br>
-   |-tests/                        #测试程序文件夹<br>
-   |-venv/                         #使用虚拟环境<br>
+&emsp;|-app/<br>
+&emsp;&emsp;|-main/&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;#主页面蓝本<br>
+&emsp;&emsp;&emsp;|-__init__.py<br>
+&emsp;&emsp;&emsp;|-views.py<br>
+&emsp;&emsp;&emsp;|-forms.py<br>
+&emsp;&emsp;&emsp;|-errors.py<br>
+&emsp;&emsp;|-auth/&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;#账户管理页面蓝本<br>
+&emsp;&emsp;&emsp;|-__init__.py<br>
+&emsp;&emsp;&emsp;|-views.py<br>
+&emsp;&emsp;&emsp;|-forms.py<br>
+&emsp;&emsp;|-api_1_0/&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#api服务蓝本<br>
+&emsp;&emsp;&emsp;|-__init__.py<br>
+&emsp;&emsp;&emsp;|-authentication.py<br>
+&emsp;&emsp;&emsp;|-decorators.py<br>
+&emsp;&emsp;&emsp;|-errors.py<br>
+&emsp;&emsp;&emsp;|-posts.py<br>
+&emsp;&emsp;|-templates/&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;#jinja2模版目录 内容略<br>
+&emsp;&emsp;|-static/                    &ensp;&ensp; #静态文件<br>
+&emsp;&emsp;|-__init__.py&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; #主程序初始化<br>
+&emsp;&emsp;|-decorators.py           #装饰器程序<br>
+&emsp;&emsp;|-email.py                    #邮件模块<br>
+&emsp;&emsp;|-exceptions.py           #自定义错误<br>
+&emsp;&emsp;|-models.py                 #数据类型<br>
+&emsp;|-manage.py                   #启动脚本<br>
+&emsp;|-config.py                        #配置信息<br>
+&emsp;|-data-dev.sqlite             #程序建设用数据库<br>
+&emsp;|-data-test.sqlite             #程序测试缓冲数据库<br>
+&emsp;|-requirements/                #程序运行扩展需求表<br>
+&emsp;|-tests/                            #测试程序文件夹<br>
+&emsp;|-venv/                            #使用虚拟环境<br>
