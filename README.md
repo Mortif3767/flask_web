@@ -43,9 +43,9 @@ PS：注册流程中应有邮箱验证环节，编程中为了测试方便，涉
 &emsp;&emsp;&emsp;|-decorators.py<br>
 &emsp;&emsp;&emsp;|-errors.py<br>
 &emsp;&emsp;&emsp;|-posts.py<br>
-&emsp;&emsp;|-templates/&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;#jinja2模版目录 内容略<br>
+&emsp;&emsp;|-templates/                #jinja2模版目录 内容略<br>
 &emsp;&emsp;|-static/                    &ensp;&ensp; #静态文件<br>
-&emsp;&emsp;|-__init__.py&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; #主程序初始化<br>
+&emsp;&emsp;|-__init__.py                    #主程序初始化<br>
 &emsp;&emsp;|-decorators.py           #装饰器程序<br>
 &emsp;&emsp;|-email.py                    #邮件模块<br>
 &emsp;&emsp;|-exceptions.py           #自定义错误<br>
